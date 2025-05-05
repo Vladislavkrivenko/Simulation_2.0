@@ -13,7 +13,7 @@ Console rendering of the map
 Clean, modular code with SRP and generics
 
 🚀 How to Start
-git clone https://github.com/your-username/simulation-world.git
+https://github.com/Vladislavkrivenko/Simulation_2.0.git
 cd simulation-world
 
 🔮 Future Improvements
