@@ -1,14 +1,16 @@
 package actionManager;
 
-public class ActionStop implements Action {
-    private final SimulationController simulationController;
+import gameManager.Simulation;
 
-    public ActionStop(SimulationController simulationController) {
-        this.simulationController = simulationController;
+public class ActionStop implements Action {
+    private final Simulation simulation;
+
+    public ActionStop(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     @Override
     public void execute() {
-        simulationController.stop();
+        simulation.stop();
     }
 }

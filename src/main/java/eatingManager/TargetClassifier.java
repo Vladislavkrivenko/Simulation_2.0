@@ -1,7 +1,10 @@
 package eatingManager;
 
+import entity.Entity;
 import entity.Grass;
+import entity.animal.Creature;
 import entity.animal.Herbivore;
+import entity.animal.Predator;
 import moveManager.SearchAlgorithm;
 
 public class TargetClassifier {

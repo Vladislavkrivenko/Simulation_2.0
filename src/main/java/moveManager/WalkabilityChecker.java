@@ -4,6 +4,7 @@ import coordinates.Coordinates;
 import entity.Entity;
 import entity.Rock;
 import entity.Tree;
+import entity.animal.Creature;
 import mapManager.EntityManager;
 
     public class WalkabilityChecker {

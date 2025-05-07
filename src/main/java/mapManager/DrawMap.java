@@ -6,16 +6,14 @@ import entity.Entity;
 public class DrawMap {
     private final MapService mapService;
     private final EntityManager entityManager;
-    private final Entity entity;
 
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String EMPTY_SPRITE = "\033[38;5;94m";//
     public static final String SQUARE_UNICODE = "🏿";
 
-    public DrawMap(MapService mapService, EntityManager entityManager, Entity entity) {
+    public DrawMap(MapService mapService, EntityManager entityManager) {
         this.mapService = mapService;
         this.entityManager = entityManager;
-        this.entity = entity;
     }
 
     public void drawingMap() {
@@ -52,5 +50,4 @@ public class DrawMap {
     private String colorizeSprite(String sprite) {
         return sprite + ANSI_RESET;
     }
-
 }

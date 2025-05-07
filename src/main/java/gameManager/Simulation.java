@@ -1,5 +1,6 @@
 package gameManager;
 
+import entity.animal.Creature;
 import entity.animal.Herbivore;
 import mapManager.DrawMap;
 import mapManager.EntityManager;

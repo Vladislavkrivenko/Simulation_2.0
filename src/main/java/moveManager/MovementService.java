@@ -1,6 +1,7 @@
 package moveManager;
 
 import coordinates.Coordinates;
+import entity.animal.Creature;
 import mapManager.EntityManager;
 
 public class MovementService {
@@ -16,7 +17,7 @@ public class MovementService {
         entityManager.removeEntity(oldPosition, creature);
 
         creature.setPosition(newPosition);
-        entityManager.installEntity(newPosition, creature);
+        entityManager.setEntity(newPosition, creature);
     }
 }
 

@@ -1,14 +1,16 @@
 package actionManager;
 
-public class ActionResume implements Action {
-    private final SimulationController simulationController;
+import gameManager.Simulation;
 
-    public ActionResume(SimulationController simulationController) {
-        this.simulationController = simulationController;
+public class ActionResume implements Action {
+    private final Simulation simulation;
+
+    public ActionResume(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     @Override
     public void execute() {
-        simulationController.resume();
+        simulation.resume();
     }
 }

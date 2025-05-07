@@ -1,17 +1,16 @@
 package eatingManager;
 
 import coordinates.Coordinates;
+import entity.Entity;
 import mapManager.EntityManager;
 
 public class EatingService {
     private final EntityManager entityManager;
     private final TargetClassifier targetClassifier;
-    private final CoordinateUtils coordinateUtils;
 
     public EatingService(EntityManager entityManager, TargetClassifier targetClassifier) {
         this.entityManager = entityManager;
         this.targetClassifier = targetClassifier;
-        this.coordinateUtils = new CoordinateUtils();
     }
     public void eatVictim(Entity predator, Entity target) {
         if (target == null) {
@@ -21,10 +20,6 @@ public class EatingService {
         if (!targetClassifier.isTargetFood(target)) {
             return;
         }
-        if (!coordinateUtils.getAdjacent(predator.getCoordinates(), target.getCoordinates())) {
-            return;
-        }
-
         Coordinates victimPosition = target.getCoordinates();
         entityManager.removeEntity(victimPosition, target);
     }

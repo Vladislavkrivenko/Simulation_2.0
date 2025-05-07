@@ -112,12 +112,12 @@ public abstract class Creature extends Entity {
             for (int dy = -getAnimalSpeed(); dy <= getAnimalSpeed(); dy++) {
                 if (Math.abs(dx) + Math.abs(dy) > getAnimalSpeed() || (dx == 0 && dy == 0)) continue;
 
-                int newX = getCoordinates().getMapWidth() + dx;
-                int newY = getCoordinates().getMapHeight() + dy;
+                int newX = getCoordinates().getX() + dx;
+                int newY = getCoordinates().getY() + dy;
 
                 Coordinates newCoordinates = new Coordinates(newX, newY);
 
-                if (mapService.getInsideMapBorder(newCoordinates) && mapService.getSquareEmpty(newCoordinates, entityManager)) {
+                if (mapService.isInsideMapBorder(newCoordinates) && mapService.isSquareEmpty(newCoordinates, entityManager)) {
                     possibleMoves.add(newCoordinates);
                 }
             }

@@ -2,6 +2,7 @@ package moveManager;
 
 import coordinates.Coordinates;
 import entity.Entity;
+import entity.animal.Creature;
 import mapManager.EntityManager;
 import mapManager.MapService;
 
@@ -92,8 +93,8 @@ public class SearchAlgorithm {
 
     public List<Coordinates> getNeighbors(Coordinates pos) {
         List<Coordinates> neighbors = new ArrayList<>();
-        int x = pos.getMapWidth();
-        int y = pos.getMapHeight();
+        int x = pos.getX();
+        int y = pos.getY();
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         for (int[] dir : directions) {
@@ -101,7 +102,7 @@ public class SearchAlgorithm {
             int ny = y + dir[1];
             Coordinates candidate = new Coordinates(nx, ny);
 
-            if (mapService.getInsideMapBorder(candidate)) {
+            if (mapService.isInsideMapBorder(candidate)) {
                 if (walkabilityChecker.isWalkable(candidate)) {
                     neighbors.add(candidate);
                 }

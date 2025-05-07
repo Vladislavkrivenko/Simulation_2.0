@@ -1,15 +1,17 @@
 package actionManager;
 
-public class ActionPause implements Action {
-    private final SimulationController simulationController;
+import gameManager.Simulation;
 
-    public ActionPause(SimulationController simulationController) {
-        this.simulationController = simulationController;
+public class ActionPause implements Action {
+    private final Simulation simulation;
+
+    public ActionPause(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     @Override
     public void execute() {
-        simulationController.pause();
+        simulation.pause();
     }
 }
 

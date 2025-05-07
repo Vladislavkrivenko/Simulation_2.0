@@ -1,7 +1,9 @@
 package gameManager;
 
+import actionManager.*;
 import coordinates.Coordinates;
 import entity.Entity;
+import entity.animal.Creature;
 import mapManager.CreateEntityOnMap;
 import mapManager.DrawMap;
 import mapManager.EntityManager;

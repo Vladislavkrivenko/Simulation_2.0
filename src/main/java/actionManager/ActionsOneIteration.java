@@ -1,14 +1,16 @@
 package actionManager;
 
-public class ActionsOneIteration implements Action{
-    private final SimulationController simulationController;
+import gameManager.Simulation;
 
-    public ActionsOneIteration(SimulationController simulationController) {
-        this.simulationController = simulationController;
+public class ActionsOneIteration implements Action{
+    private final Simulation simulation;
+
+    public ActionsOneIteration(Simulation simulation) {
+        this.simulation = simulation;
     }
 
     @Override
     public void execute() {
-        simulationController.oneIteration();
+        simulation.oneIteration();
     }
 }

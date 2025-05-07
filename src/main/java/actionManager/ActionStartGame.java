@@ -1,14 +1,16 @@
 package actionManager;
 
-    public class ActionStartGame implements Action {
-        private final SimulationController simulationController;
+import gameManager.Simulation;
 
-        public ActionStartGame(SimulationController simulationController) {
-            this.simulationController = simulationController;
+public class ActionStartGame implements Action {
+        private final Simulation simulation;
+
+        public ActionStartGame(Simulation simulation) {
+            this.simulation = simulation;
         }
 
         @Override
         public void execute() {
-            simulationController.runSimulationLoop();
+            simulation.runSimulationLoop();
         }
     }
