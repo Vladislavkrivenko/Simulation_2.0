@@ -10,25 +10,24 @@ import java.util.*;
 
 public class SearchAlgorithm {
     Creature creature;
-    protected Class<? extends Entity> victimClass;
+    private Class<? extends Entity> victimClass;
 
     private EntityManager entityManager;
     private final MapService mapService;
-    private final WalkabilityChecker walkabilityChecker;
+
     private Coordinates targetCoordinates = null;
     private final Map<Coordinates, Coordinates> cameFrom = new HashMap<>();
 
-    public SearchAlgorithm(EntityManager entityManager, MapService mapService, WalkabilityChecker walkabilityChecker) {
+    public SearchAlgorithm(EntityManager entityManager, MapService mapService) {
         this.entityManager = entityManager;
         this.mapService = mapService;
-        this.walkabilityChecker = walkabilityChecker;
     }
 
-    public void setVictim(Class<? extends Entity> victim) {//установить жертву
+    public void setVictim(Class<? extends Entity> victim) {
         this.victimClass = victim;
     }
 
-    public Class<? extends Entity> getVictim() {//возврат жертвы
+    public Class<? extends Entity> getVictim() {
         return victimClass;
     }
 
@@ -40,10 +39,7 @@ public class SearchAlgorithm {
         this.entityManager = entityManager;
     }
 
-    public List<Coordinates> getTargetForFood(MapService mapService, Coordinates start) {
-        if (mapService == null) {
-            throw new IllegalStateException("entityManager is null in SearchAlgorithm.bfs");
-        }
+    public List<Coordinates> findPathToNearestVictim(Coordinates start) {
 
         Queue<Coordinates> queue = new LinkedList<>();
         Set<Coordinates> visited = new HashSet<>();
@@ -54,17 +50,16 @@ public class SearchAlgorithm {
         queue.add(start);
         visited.add(start);
 
-
         while (!queue.isEmpty()) {
             Coordinates current = queue.poll();
-
             Entity currentEntity = entityManager.getEntity(current);
+
             if (victimClass != null && victimClass.isInstance(currentEntity)) {
                 targetCoordinates = current;
                 break;
             }
 
-            for (Coordinates neighbor : getNeighbors(current)) {
+            for (Coordinates neighbor : getWalkableNeighbors(current)) {
                 if (!visited.contains(neighbor)) {
                     visited.add(neighbor);
                     queue.add(neighbor);
@@ -91,7 +86,7 @@ public class SearchAlgorithm {
         return path;
     }
 
-    public List<Coordinates> getNeighbors(Coordinates pos) {
+    public List<Coordinates> getWalkableNeighbors(Coordinates pos) {
         List<Coordinates> neighbors = new ArrayList<>();
         int x = pos.getX();
         int y = pos.getY();
@@ -102,14 +97,11 @@ public class SearchAlgorithm {
             int ny = y + dir[1];
             Coordinates candidate = new Coordinates(nx, ny);
 
-            if (mapService.isInsideMapBorder(candidate)) {
-                if (walkabilityChecker.isWalkable(candidate)) {
-                    neighbors.add(candidate);
-                }
+            if (mapService.isInsideMapBorder(candidate) && mapService.isWalkable(candidate)) {
+                neighbors.add(candidate);
             }
         }
 
         return neighbors;
     }
 }
-

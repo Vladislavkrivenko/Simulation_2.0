@@ -1,18 +1,12 @@
 package entity.animal;
 
 import coordinates.Coordinates;
-import eatingManager.EatingService;
-import eatingManager.TargetClassifier;
+import eatingManager.CreatureTargetingManager;
 import entity.Entity;
 import mapManager.EntityManager;
 import mapManager.MapService;
-import moveManager.MovementService;
+import moveManager.AnimalMovement;
 import moveManager.SearchAlgorithm;
-import moveManager.WalkabilityChecker;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public abstract class Creature extends Entity {
     protected String typeOfAnimal;
@@ -23,11 +17,10 @@ public abstract class Creature extends Entity {
     protected EntityManager entityManager;
     protected final MapService mapService;
 
-    private final EatingService eatingService;
-    private final TargetClassifier targetClassifier;
-    private final MovementService movementService;
+    private final CreatureTargetingManager creatureTargetingManager;
+    private final AnimalMovement animalMovement;
 
-    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, MapService mapService,SearchAlgorithm searchAlgorithm) {
+    public Creature(Coordinates coordinates, String typeOfAnimal, int animalSpeed, Class<? extends Entity> victim, EntityManager entityManager, MapService mapService, SearchAlgorithm searchAlgorithm) {
         super(coordinates);
         this.typeOfAnimal = typeOfAnimal;
         this.animalSpeed = animalSpeed;
@@ -35,105 +28,36 @@ public abstract class Creature extends Entity {
         this.entityManager = entityManager;
         this.mapService = mapService;
 
-        this.searchAlgorithm = new SearchAlgorithm(entityManager,mapService,new WalkabilityChecker(entityManager));
+        this.searchAlgorithm = new SearchAlgorithm(entityManager, mapService);
         searchAlgorithm.setEntityManager(entityManager);
         this.searchAlgorithm.setCreature(this);
         this.searchAlgorithm.setVictim(victim);
 
-        this.targetClassifier = new TargetClassifier(searchAlgorithm, this);
-        this.eatingService = new EatingService(entityManager, targetClassifier);
-        this.movementService = new MovementService(entityManager);
-
-
+        this.creatureTargetingManager = new CreatureTargetingManager(searchAlgorithm, this, entityManager,mapService);
+        this.animalMovement = new AnimalMovement(entityManager, this, mapService);
     }
+
     public void makeMove() {
         if (victim == null) {
             return;
         }
-
         searchAlgorithm.setVictim(victim);
 
-        if (checkAdjacentAndEat()) {
+        if (creatureTargetingManager.checkAdjacentAndEat()) {
             return;
         }
 
-        if (pursueAndMaybeEat()) {
+        if (creatureTargetingManager.pursueAndMaybeEat()) {
             return;
         }
-        moveRandomly();
-    }
-
-    private boolean checkAdjacentAndEat() {
-        Coordinates currentPos = getCoordinates();
-
-        for (Coordinates neighbor : searchAlgorithm.getNeighbors(currentPos)) {
-            Entity entity = entityManager.getEntity(neighbor);
-
-            if (targetClassifier.isTargetFood(entity)) {
-                eatingService.eatVictim(this, entity);
-                movementService.moveTo(this, neighbor);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean pursueAndMaybeEat() {
-        Coordinates currentPos = getCoordinates();
-        List<Coordinates> path = searchAlgorithm.getTargetForFood(mapService, currentPos);
-
-        if (path == null || path.isEmpty()) {
-            return false;
-        }
-
-        if (path.size() == 2) {
-            Coordinates victimCoordinates = path.get(1);
-            Entity entityAtTarget = entityManager.getEntity(victimCoordinates);
-
-            if (targetClassifier.isTargetFood(entityAtTarget)) {
-                eatingService.eatVictim(this, entityAtTarget);
-                movementService.moveTo(this, victimCoordinates);
-                return true;
-            }
-        }
-
-        Coordinates nextStep = path.get(Math.min(getAnimalSpeed(), path.size() - 1));
-        movementService.moveTo(this, nextStep);
-        return true;
-    }
-
-
-    public void moveRandomly() {
-        Random random = new Random();
-        List<Coordinates> possibleMoves = new ArrayList<>();
-
-        for (int dx = -getAnimalSpeed(); dx <= getAnimalSpeed(); dx++) {
-            for (int dy = -getAnimalSpeed(); dy <= getAnimalSpeed(); dy++) {
-                if (Math.abs(dx) + Math.abs(dy) > getAnimalSpeed() || (dx == 0 && dy == 0)) continue;
-
-                int newX = getCoordinates().getX() + dx;
-                int newY = getCoordinates().getY() + dy;
-
-                Coordinates newCoordinates = new Coordinates(newX, newY);
-
-                if (mapService.isInsideMapBorder(newCoordinates) && mapService.isSquareEmpty(newCoordinates, entityManager)) {
-                    possibleMoves.add(newCoordinates);
-                }
-            }
-        }
-
-        if (!possibleMoves.isEmpty()) {
-            Coordinates randomPosition = possibleMoves.get(random.nextInt(possibleMoves.size()));
-            movementService.moveTo(this, randomPosition);
-        }
+        animalMovement.moveRandomly();
     }
 
     public int getAnimalSpeed() {
         return animalSpeed;
     }
 
-    public void setPosition(Coordinates newPosition) {
+    public final void setPosition(Coordinates newPosition) {
         if (newPosition == null) {
             throw new IllegalArgumentException("New position cannot be null");
         }

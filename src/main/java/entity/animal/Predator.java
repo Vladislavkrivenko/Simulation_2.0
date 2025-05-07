@@ -14,11 +14,6 @@ public class Predator extends Creature {
         }
 
         @Override
-        public void setPosition(Coordinates newPosition) {
-            super.setPosition(newPosition);
-        }
-
-        @Override
         public String getSprite() {
             return SPRITE_OF_PREDATOR;
         }

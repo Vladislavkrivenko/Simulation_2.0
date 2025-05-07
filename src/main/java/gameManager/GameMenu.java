@@ -102,8 +102,7 @@ public class GameMenu {
         animal = new ArrayList<>();
 
         for (Map.Entry<Coordinates, Entity> entry : game.getEntityManager().getLocationOfEntity().entrySet()) {
-            if (entry.getValue() instanceof Creature) {
-                Creature creature = (Creature) entry.getValue();
+            if (entry.getValue() instanceof Creature creature) {
                 animal.add(creature);
             }
         }

@@ -8,7 +8,6 @@ import entity.Tree;
 import entity.animal.Herbivore;
 import entity.animal.Predator;
 import moveManager.SearchAlgorithm;
-import moveManager.WalkabilityChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +18,12 @@ public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
     private final EntityManager entityManager;
     private final MapService mapService;
-    private final WalkabilityChecker  walkabilityChecker;
     private final SearchAlgorithm searchAlgorithm;
 
     public CreateEntityOnMap(int rows, int columns) {
         this.mapService = new MapService(rows, columns);
         this.entityManager = new EntityManager();
-        this.walkabilityChecker = new WalkabilityChecker(entityManager);
-        this.searchAlgorithm =new SearchAlgorithm(entityManager,mapService,walkabilityChecker);
+        this.searchAlgorithm = new SearchAlgorithm(entityManager, mapService);
     }
 
     public void fillTheMapWithEntity() {
@@ -52,22 +49,14 @@ public class CreateEntityOnMap {
     }
 
     private Entity createEntity(EnumEntity enumEntity, Coordinates coordinates) {
-        switch (enumEntity) {
-            case ROCK:
-                return new Rock(coordinates);
-            case GRASS:
-                return new Grass(coordinates);
-            case TREE:
-                return new Tree(coordinates);
-            case HERBIVORE:
-                return new Herbivore(coordinates, "Rabbit", 2, entityManager, mapService,searchAlgorithm);
-            case PREDATOR:
-                return new Predator(coordinates, "Wolf", 2, entityManager, mapService,searchAlgorithm);
-            default:
-                throw new IllegalArgumentException("Unknown entity type" + enumEntity);
-
-        }
-
+        return switch (enumEntity) {
+            case ROCK -> new Rock(coordinates);
+            case GRASS -> new Grass(coordinates);
+            case TREE -> new Tree(coordinates);
+            case HERBIVORE -> new Herbivore(coordinates, "Rabbit", 2, entityManager, mapService, searchAlgorithm);
+            case PREDATOR -> new Predator(coordinates, "Wolf", 2, entityManager, mapService, searchAlgorithm);
+            default -> throw new IllegalArgumentException("Unknown entity type" + enumEntity);
+        };
     }
 
     private Coordinates randomCell() {
