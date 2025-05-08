@@ -2,6 +2,8 @@ package moveManager;
 
 import coordinates.Coordinates;
 import entity.Entity;
+import entity.Rock;
+import entity.Tree;
 import entity.animal.Creature;
 import mapManager.EntityManager;
 import mapManager.MapService;
@@ -43,7 +45,6 @@ public class SearchAlgorithm {
 
         Queue<Coordinates> queue = new LinkedList<>();
         Set<Coordinates> visited = new HashSet<>();
-
         cameFrom.clear();
         targetCoordinates = null;
 
@@ -96,12 +97,18 @@ public class SearchAlgorithm {
             int nx = x + dir[0];
             int ny = y + dir[1];
             Coordinates candidate = new Coordinates(nx, ny);
+            if (!mapService.isInsideMapBorder(candidate)) {
+                continue;
+            }
 
-            if (mapService.isInsideMapBorder(candidate) && mapService.isWalkable(candidate)) {
+            Entity entity = entityManager.getEntity(candidate);
+
+            if (entity == null || entity.getClass() == victimClass || victimClass.isInstance(entity)) {
+                neighbors.add(candidate);
+            } else if (!(entity instanceof Rock || entity instanceof Tree || entity instanceof Creature)) {
                 neighbors.add(candidate);
             }
         }
-
         return neighbors;
     }
 }

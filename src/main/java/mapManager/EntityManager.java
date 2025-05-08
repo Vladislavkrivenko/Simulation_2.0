@@ -32,6 +32,7 @@ public class EntityManager {
     public void removeEntity(Coordinates coordinates, Entity entity) {
         if (locationOfEntity.containsKey(coordinates) && locationOfEntity.get(coordinates).equals(entity)) {
             locationOfEntity.remove(coordinates);
+            occupiedCells.remove(coordinates);
         }
     }
 

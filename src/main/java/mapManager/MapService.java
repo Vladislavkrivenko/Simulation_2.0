@@ -11,10 +11,14 @@ public class MapService {
     private final int totalColumns;
     private final EntityManager entityManager;
 
-    public MapService(int totalRows, int totalColumns) {
+    public MapService(int totalRows, int totalColumns,EntityManager entityManager) {
         this.totalRows = totalRows;
         this.totalColumns = totalColumns;
-        this.entityManager = new EntityManager();
+        this.entityManager = entityManager;
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public int getTotalRows() {
@@ -30,7 +34,7 @@ public class MapService {
                 && coordinates.getY() >= 0 && coordinates.getY() < totalColumns;
     }
 
-    public boolean isSquareEmpty(Coordinates coordinates, EntityManager entityManager) {
+    public boolean isSquareEmpty(Coordinates coordinates) {
         return !entityManager.getLocationOfEntity().containsKey(coordinates);
     }
 

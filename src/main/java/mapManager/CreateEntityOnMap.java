@@ -7,7 +7,6 @@ import entity.Rock;
 import entity.Tree;
 import entity.animal.Herbivore;
 import entity.animal.Predator;
-import moveManager.SearchAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +17,10 @@ public class CreateEntityOnMap {
     private static final int TOTAL_PERCENT_ENTITY = 5;
     private final EntityManager entityManager;
     private final MapService mapService;
-    private final SearchAlgorithm searchAlgorithm;
 
-    public CreateEntityOnMap(int rows, int columns) {
-        this.mapService = new MapService(rows, columns);
-        this.entityManager = new EntityManager();
-        this.searchAlgorithm = new SearchAlgorithm(entityManager, mapService);
+    public CreateEntityOnMap(int rows, int columns, EntityManager entityManager) {
+        this.mapService = new MapService(rows, columns, entityManager);
+        this.entityManager = entityManager;
     }
 
     public void fillTheMapWithEntity() {
@@ -53,8 +50,8 @@ public class CreateEntityOnMap {
             case ROCK -> new Rock(coordinates);
             case GRASS -> new Grass(coordinates);
             case TREE -> new Tree(coordinates);
-            case HERBIVORE -> new Herbivore(coordinates, "Rabbit", 2, entityManager, mapService, searchAlgorithm);
-            case PREDATOR -> new Predator(coordinates, "Wolf", 2, entityManager, mapService, searchAlgorithm);
+            case HERBIVORE -> new Herbivore(coordinates, mapService);
+            case PREDATOR -> new Predator(coordinates, mapService);
             default -> throw new IllegalArgumentException("Unknown entity type" + enumEntity);
         };
     }

@@ -23,11 +23,15 @@ public class GameMenu {
     private final Simulation simulation = new Simulation();
     private Actions actions;
     private final UserInput userInput = new UserInput();
-
+    private final EntityManager entityManager;
     private List<Creature> animal;
     private DrawMap drawMap;
 
     private boolean gameStarted = false;
+
+    public GameMenu(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     public void startGame() {
         while (true) {
@@ -92,7 +96,7 @@ public class GameMenu {
         int width = userInput.inputNumbersFromUser("Enter the map width:");
         int height = userInput.inputNumbersFromUser("Enter the height of the map:");
 
-        CreateEntityOnMap game = new CreateEntityOnMap(width, height);
+        CreateEntityOnMap game = new CreateEntityOnMap(width, height, entityManager);
         game.fillTheMapWithEntity();
 
         MapService mapService = game.getMapService();

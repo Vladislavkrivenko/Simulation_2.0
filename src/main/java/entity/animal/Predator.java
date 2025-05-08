@@ -1,15 +1,14 @@
 package entity.animal;
 
 import coordinates.Coordinates;
-import mapManager.EntityManager;
+import entity.Entity;
 import mapManager.MapService;
-import moveManager.SearchAlgorithm;
 
 
 public class Predator extends Creature {
     public static final String SPRITE_OF_PREDATOR = "🐺";
-        public Predator(Coordinates coordinates, String typeOfAnimal, int animalSpeed, EntityManager entityManager, MapService mapService, SearchAlgorithm searchAlgorithm) {
-            super(coordinates, "Wolf", 2, Herbivore.class, entityManager, mapService,searchAlgorithm);
+        public Predator(Coordinates coordinates, MapService mapService) {
+            super(coordinates, "Wolf", 2,mapService);
 
         }
 
@@ -17,5 +16,10 @@ public class Predator extends Creature {
         public String getSprite() {
             return SPRITE_OF_PREDATOR;
         }
+
+    @Override
+    public Class<? extends Entity> getVictimType() {
+        return Herbivore.class;
     }
+}
 

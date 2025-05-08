@@ -42,7 +42,7 @@ public class AnimalMovement {
 
                 Coordinates newCoordinates = new Coordinates(newX, newY);
 
-                if (mapService.isInsideMapBorder(newCoordinates) && mapService.isSquareEmpty(newCoordinates, entityManager)) {
+                if (mapService.isInsideMapBorder(newCoordinates) && mapService.isSquareEmpty(newCoordinates)) {
                     possibleMoves.add(newCoordinates);
                 }
             }

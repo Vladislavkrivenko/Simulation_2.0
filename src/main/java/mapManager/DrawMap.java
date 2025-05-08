@@ -21,7 +21,7 @@ public class DrawMap {
             StringBuilder line = new StringBuilder();
             for (int rows = 0; rows < mapService.getTotalRows(); rows++) {
                 Coordinates coordinates = new Coordinates(colum, rows);
-                if (mapService.isSquareEmpty(coordinates, entityManager)) {
+                if (mapService.isSquareEmpty(coordinates)) {
                     line.append(getSpriteForEmptySquare(coordinates));
 
                 } else {
